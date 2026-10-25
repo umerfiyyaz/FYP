@@ -45,7 +45,7 @@ export function Processing({ go }: { go: Go }) {
     const t = setInterval(() => setP((v) => Math.min(100, v + 2)), 70);
     return () => clearInterval(t);
   }, []);
-  useEffect(() => { if (p >= 100) { const t = setTimeout(() => go("results"), 500); return () => clearTimeout(t); } }, [p, go]);
+  useEffect(() => { if (p < 100) return; const t = setTimeout(() => go("results"), 500); return () => clearTimeout(t); }, [p, go]);
   const done = Math.floor(p / 25);
   return (
     <div className="pb-6">

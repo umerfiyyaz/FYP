@@ -39,7 +39,7 @@ export function Signup({ go }: { go: Go }) {
     <div className="p-5">
       <div className="flex items-center justify-between">
         <button onClick={() => go("welcome")} className="press grid size-10 place-items-center rounded-full bg-card shadow-sm"><Icon n="arrow_back_ios_new" className="!text-base" /></button>
-        <div className="flex items-center gap-2"><img src={IMG.logo} alt="" className="size-7 rounded-full" /><b>CatSense AI</b></div>
+        <div className="flex items-center gap-2"><span className="grid size-7 place-items-center rounded-full bg-lime"><Icon n="pets" className="!text-base" /></span><b>CatSense AI</b></div>
         <span className="size-2 rounded-full bg-lime" />
       </div>
       <Pill className="float-in mt-5 bg-lilac text-lilac-deep">🐾 AI Feline Acoustics</Pill>

@@ -60,7 +60,7 @@ export function TopBar({ title, go, back }: { title?: string; go: Go; back?: Scr
       ) : (
         <>
           <div className="flex items-center gap-2">
-            <img src={IMG.logo} alt="" className="size-8 rounded-full" />
+            <span className="grid size-8 place-items-center rounded-full bg-lime"><Icon n="pets" className="!text-lg" /></span>
             <span className="font-extrabold">CatSense</span>
           </div>
           <div className="flex items-center gap-3">
