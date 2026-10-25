@@ -115,7 +115,7 @@ const segs = [
 ];
 export function Behavior({ go }: { go: Go }) {
   const [sel, setSel] = useState(1);
-  const s = segs[sel];
+  const s = segs[sel]!;
   return (
     <div className="pb-6">
       <TopBar go={go} back="results" title="Behavior Detail" />
@@ -152,7 +152,7 @@ export function Behavior({ go }: { go: Go }) {
 }
 
 export function Health({ go }: { go: Go }) {
-  const rows = [["water_drop", "Eating & Hydration", "On track (100% of average)", "check_circle"], ["directions_run", "Daily Activity", "3.4 hrs vs 3.2 hrs baseline (+6%)", "trending_up"], ["bedtime", "Resting & Sleep", "14.2 hrs vs 14.0 hrs baseline", "check_circle"], ["graphic_eq", "Vocal Pitch Stability", "Normal 26–32 Hz purr resonance", "check_circle"]];
+  const rows = [["water_drop", "Eating & Hydration", "On track (100% of average)", "check_circle"], ["directions_run", "Daily Activity", "3.4 hrs vs 3.2 hrs baseline (+6%)", "trending_up"], ["bedtime", "Resting & Sleep", "14.2 hrs vs 14.0 hrs baseline", "check_circle"], ["graphic_eq", "Vocal Pitch Stability", "Normal 26–32 Hz purr resonance", "check_circle"]] as const;
   return (
     <div className="pb-6">
       <TopBar go={go} back="results" title="Health & Risk" />
