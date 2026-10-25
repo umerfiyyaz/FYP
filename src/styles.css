@@ -27,6 +27,18 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
+  --color-lime: var(--lime);
+  --color-lime-deep: var(--lime-deep);
+  --color-lilac: var(--lilac);
+  --color-lilac-deep: var(--lilac-deep);
+  --color-mint: var(--mint);
+  --color-sky: var(--sky);
+  --color-peach: var(--peach);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-warn: var(--warn);
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-serif: "Playfair Display", serif;
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -63,17 +75,27 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --background: oklch(0.982 0.002 220);
+  --foreground: oklch(0.21 0.005 220);
+  --lime: oklch(0.93 0.14 115);
+  --lime-deep: oklch(0.48 0.11 115);
+  --lilac: oklch(0.9 0.05 295);
+  --lilac-deep: oklch(0.5 0.07 295);
+  --mint: oklch(0.92 0.06 160);
+  --sky: oklch(0.95 0.035 210);
+  --peach: oklch(0.95 0.035 60);
+  --ink: oklch(0.22 0.005 220);
+  --ink-foreground: oklch(0.98 0 0);
+  --warn: oklch(0.65 0.17 50);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.93 0.14 115);
+  --primary-foreground: oklch(0.21 0.005 220);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
+  --muted: oklch(0.955 0.003 220);
   --muted-foreground: oklch(0.554 0.046 257.417);
   --accent: oklch(0.968 0.007 247.896);
   --accent-foreground: oklch(0.208 0.042 265.755);
@@ -142,3 +164,17 @@
     color: var(--color-foreground);
   }
 }
+
+body { font-family: var(--font-sans); }
+.msym { font-family: "Material Symbols Outlined"; font-weight: normal; font-style: normal; line-height: 1; display: inline-block; white-space: nowrap; font-size: 20px; font-feature-settings: "liga"; -webkit-font-smoothing: antialiased; }
+@keyframes float-in { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes grow-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes wave { 0%,100% { transform: scaleY(.4); } 50% { transform: scaleY(1); } }
+@utility float-in { animation: float-in .55s cubic-bezier(.2,.8,.2,1) both; }
+@utility grow-y { transform-origin: bottom; animation: grow-y .8s cubic-bezier(.2,.8,.2,1) both; }
+@utility grow-x { transform-origin: left; animation: grow-x 1s cubic-bezier(.2,.8,.2,1) both; }
+@utility bob { animation: bob 3s ease-in-out infinite; }
+@utility wave { transform-origin: center; animation: wave 1s ease-in-out infinite; }
+@utility press { transition: transform .15s ease; &:active { transform: scale(.95); } }
