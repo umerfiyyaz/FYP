@@ -12,14 +12,18 @@ Open your project in the [Lovable editor](https://lovable.dev) and keep building
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Prefer working locally? You need **Node.js 22** and **Bun** — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating), then `npm i -g bun`.
 
 ```sh
 git clone <this-repository-url>
 cd <repository-name>
-npm i
-npm run dev
+bun install
+bun run dev
 ```
+
+Then open the local address the terminal prints (usually http://localhost:5173).
+
+Use Bun, not npm — `npm install` fails on this project's dependency setup.
 
 ## Built with
 
