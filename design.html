@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CatSense™ AI — Feline Acoustics &amp; Behavioral Biometrics</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-canvas: #0F1216;
+      --app-bg: #F8F9FA;
+      --card-bg: #FFFFFF;
+      --text-main: #14171A;
+      --text-muted: #657786;
+      --text-subtle: #8E9CA8;
+      --lime: #D4F442;
+      --lime-hover: #C5E632;
+      --lime-light: #F4FCE1;
+      --lime-border: #C8E832;
+      --purple-accent: #7856FF;
+      --purple-light: #F1EDFF;
+      --mint-accent: #27AE60;
+      --mint-light: #E8F8F0;
+      --amber-accent: #F2994A;
+      --amber-light: #FFF5EC;
+      --rose-accent: #EB5757;
+      --rose-light: #FDECEC;
+      --border-color: rgba(0, 0, 0, 0.06);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'Newsreader', Georgia, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      background-image: 
+        radial-gradient(circle at 20% 15%, rgba(212, 244, 66, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 85%, rgba(120, 86, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(#20252D 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 24px 24px;
+      font-family: var(--font-sans);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px 10px 40px;
+      overflow-x: hidden;
+    }
+
+    /* Top Demo Control Ribbon */
+    .demo-bar {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 8px 14px;
+      background: rgba(25, 29, 36, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      color: #fff;
+      font-size: 12px;
+      z-index: 100;
+    }
+
+    .demo-brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--lime);
+      letter-spacing: -0.3px;
+    }
+
+    .screen-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .screen-select-wrap select {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 11.5px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .screen-select-wrap select option {
+      background: #191D24;
+      color: #fff;
+    }
+
+    .sound-toggle-btn {
+      background: transparent;
+      border: none;
+      color: #8E9CA8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 50%;
+      transition: color 0.2s;
+    }
+    .sound-toggle-btn.active {
+      color: var(--lime);
+    }
+
+    /* Mobile Frame */
+    .phone-container {
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      height: 844px;
+      background: var(--app-bg);
+      border-radius: 46px;
+      box-shadow: 
+        0 0 0 10px #1E232B,
+        0 0 0 12px rgba(255, 255, 255, 0.1),
+        0 30px 80px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Dynamic Island */
+    .notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .notch.expanded {
+      width: 220px;
+      height: 40px;
+    }
+    .notch-camera {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #0a0e14;
+      border: 1px solid #1c222c;
+    }
+    .notch-sensor {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #0d1a29;
+    }
+    .notch-audio-pill {
+      display: none;
+      font-size: 10px;
+      color: var(--lime);
+      font-weight: 600;
+      align-items: center;
+      gap: 4px;
+    }
+    .notch.expanded .notch-audio-pill {
+      display: flex;
+    }
+
+    /* Screen viewport container */
+    .screen-viewport {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      padding-bottom: 74px; /* clearance for bottom nav */
+    }
+
+    .screen-viewport::-webkit-scrollbar {
+      width: 4px;
+    }
+    .screen-viewport::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+    }
+
+    /* Top Status Bar */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #14171A;
+      z-index: 90;
+      position: relative;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Typography Utilities */
+    .font-serif-italic {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    /* Screen Base Class */
+    .screen {
+      display: none;
+      padding: 6px 16px 20px;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .screen.active {
+      display: block;
+      opacity: 1;
+      animation: screenFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes screenFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Card Animations & Press States */
+    .anim-card {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: cardFloatUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .anim-delay-1 { animation-delay: 0.05s; }
+    .anim-delay-2 { animation-delay: 0.12s; }
+    .anim-delay-3 { animation-delay: 0.18s; }
+    .anim-delay-4 { animation-delay: 0.25s; }
+    .anim-delay-5 { animation-delay: 0.32s; }
+
+    @keyframes cardFloatUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .press-btn {
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+      user-select: none;
+    }
+    .press-btn:active {
+      transform: scale(0.95) !important;
+    }
+
+    /* Header */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding: 4px 0;
+    }
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: #14171A;
+    }
+    .app-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #14171A;
+      position: relative;
+    }
+    .badge-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #EB5757;
+      border: 1.5px solid #fff;
+    }
+    .avatar-mini {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--lime);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: #14181F;
+      border-radius: 26px 26px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 12px 10px;
+      z-index: 95;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: #8E9CA8;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+    }
+    .nav-item.active {
+      color: var(--lime);
+    }
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    /* Card Styles */
+    .card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    /* Buttons */
+    .btn-lime {
+      background: var(--lime);
+      color: #14171A;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 18px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(212, 244, 66, 0.3);
+    }
+    .btn-lime:hover {
+      background: var(--lime-hover);
+    }
+    .btn-dark {
+      background: #14181F;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 18px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      width: 100%;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border-color);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 13.5px;
+      border-radius: 16px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Badges & Tags */
+    .tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tag-lime { background: var(--lime-light); color: #5B7200; border: 1px solid var(--lime-border); }
+    .tag-purple { background: var(--purple-light); color: var(--purple-accent); }
+    .tag-mint { background: var(--mint-light); color: var(--mint-accent); }
+    .tag-amber { background: var(--amber-light); color: var(--amber-accent); }
+    .tag-rose { background: var(--rose-light); color: var(--rose-accent); }
+    .tag-dark { background: #14181F; color: var(--lime); }
+
+    /* Interactive Living Animated Cat Character */
+    .cat-avatar-interactive {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .animated-cat-svg {
+      overflow: visible;
+      transform-origin: center bottom;
+      animation: catSubtleBreathe 3.5s ease-in-out infinite;
+      transition: transform 0.2s ease;
+    }
+
+    @keyframes catSubtleBreathe {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      50% { transform: translateY(-3px) scaleY(1.02); }
+    }
+
+    .cat-ear-left {
+      transform-origin: 26px 45px;
+      animation: catEarTwitchLeft 4.5s ease-in-out infinite;
+    }
+    .cat-ear-right {
+      transform-origin: 94px 45px;
+      animation: catEarTwitchRight 3.8s ease-in-out infinite;
+    }
+
+    @keyframes catEarTwitchLeft {
+      0%, 88%, 100% { transform: rotate(0deg); }
+      90% { transform: rotate(-8deg); }
+      93% { transform: rotate(4deg); }
+      96% { transform: rotate(0deg); }
+    }
+    @keyframes catEarTwitchRight {
+      0%, 80%, 100% { transform: rotate(0deg); }
+      82% { transform: rotate(7deg); }
+      85% { transform: rotate(-5deg); }
+      88% { transform: rotate(0deg); }
+    }
+
+    .cat-pupil {
+      animation: pupilWander 5s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+      transition: transform 0.1s ease-out;
+    }
+
+    @keyframes pupilWander {
+      0%, 20% { transform: translate(0, 0); }
+      25%, 45% { transform: translate(-3px, 0); } /* look left */
+      50%, 65% { transform: translate(3px, 0); }  /* look right */
+      70%, 85% { transform: translate(0, -2px); }  /* look up */
+      90%, 100% { transform: translate(0, 0); }
+    }
+
+    .cat-eyelid {
+      transform-origin: center;
+      animation: catBlink 3.8s ease-in-out infinite;
+    }
+    @keyframes catBlink {
+      0%, 96%, 100% { transform: scaleY(0); }
+      98% { transform: scaleY(1); }
+    }
+
+    .acoustic-ring {
+      position: absolute;
+      border: 1.5px solid rgba(212, 244, 66, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: acousticPulse 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+    }
+    .acoustic-ring:nth-child(2) { animation-delay: 0.9s; }
+    .acoustic-ring:nth-child(3) { animation-delay: 1.8s; }
+
+    @keyframes acousticPulse {
+      0% {
+        width: 70px;
+        height: 70px;
+        opacity: 0.9;
+        transform: scale(0.75);
+      }
+      100% {
+        width: 170px;
+        height: 170px;
+        opacity: 0;
+        transform: scale(1.4);
+      }
+    }
+
+    /* Timeline dynamic fill */
+    .timeline-bar-segment {
+      height: 100%;
+      border-radius: 4px;
+      transform-origin: left;
+      transform: scaleX(0);
+      animation: timelineFill 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes timelineFill {
+      to { transform: scaleX(1); }
+    }
+
+    /* Live Audio Visualizer Bars */
+    .wave-bars {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      height: 48px;
+      padding: 0 10px;
+    }
+    .wave-bar {
+      width: 4px;
+      border-radius: 4px;
+      background: var(--purple-accent);
+      min-height: 6px;
+      transition: height 0.1s ease;
+    }
+    .wave-bar.playing {
+      animation: barOscillate 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes barOscillate {
+      0% { height: 8px; }
+      100% { height: 42px; }
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #E2E8F0;
+      transition: .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    input:checked + .slider {
+      background-color: var(--lime);
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+      background-color: #14171A;
+    }
+
+    /* Toast */
+    .toast {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-30px);
+      background: #14181F;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast svg {
+      color: var(--lime);
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Radar Scan Line */
+    .radar-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto;
+      border-radius: 50%;
+      border: 1px dashed rgba(212, 244, 66, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .radar-sweep {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(212, 244, 66, 0.25) 360deg);
+      animation: radarSpin 2.5s linear infinite;
+    }
+    @keyframes radarSpin {
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Demo Switcher Ribbon -->
+  <div class="demo-bar">
+    <div class="demo-brand">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+      </svg>
+      <span>CatSense™</span>
+    </div>
+
+    <div class="screen-select-wrap">
+      <label for="screenSwitcher" style="font-size: 11px; color:#A0AEC0;">Screen:</label>
+      <select id="screenSwitcher" onchange="navigateTo(this.value)">
+        <option value="screen-onboarding">1. Onboarding Hero (AI Live)</option>
+        <option value="screen-login">2. Login &amp; Sign Up</option>
+        <option value="screen-setup">3. Tell us about your cat</option>
+        <option value="screen-empty">4. Empty State (0 Scans)</option>
+        <option value="screen-dashboard" selected>5. Main Dashboard</option>
+        <option value="screen-analyze">6. Analyze Video Picker</option>
+        <option value="screen-processing">7. Neural Processing Screen</option>
+        <option value="screen-results">8. Results Overview</option>
+        <option value="screen-breakdown">9. Behavior Breakdown</option>
+        <option value="screen-health">10. Health &amp; Risk Index</option>
+        <option value="screen-sound">11. Acoustic Decode / Waves</option>
+        <option value="screen-history">12. History &amp; Trends</option>
+        <option value="screen-alerts">13. Feline Alerts</option>
+        <option value="screen-profile">14. Milo's Profile &amp; AI</option>
+      </select>
+    </div>
+
+    <button class="sound-toggle-btn active" id="soundToggleBtn" onclick="toggleAudio()" title="Sound Effects">
+      <svg id="soundIconOn" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Device Shell -->
+  <div class="phone-container">
+
+    <!-- Interactive Dynamic Island -->
+    <div class="notch" id="dynamicIsland" onclick="expandIsland()">
+      <div class="notch-sensor"></div>
+      <div class="notch-audio-pill">
+        <span style="display:inline-block; width:6px; height:6px; background:#D4F442; border-radius:50%;"></span>
+        <span>Acoustic: Purr 28Hz</span>
+      </div>
+      <div class="notch-camera"></div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span id="deviceClock">9:41</span>
+      <div class="status-icons">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.79-1.79C9.07 20.26 10.48 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z" opacity="0.3"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+        </svg>
+        <svg width="18" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="2" y="6" width="18" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+          <rect x="4" y="8" width="13" height="8" rx="1.5" fill="currentColor"/>
+          <path d="M22 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Toast Component -->
+    <div class="toast" id="appToast">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="toastMsg">Logged successfully!</span>
+    </div>
+
+    <!-- Scrollable Screen Viewport -->
+    <div class="screen-viewport" id="screenViewport">
+
+      <!-- ============================================== -->
+      <!-- SCREEN 1: ONBOARDING / HERO (AI LIVE DECODE) -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-onboarding">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="display: flex; gap: 4px;">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: #27AE60;"></div>
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: #D4F442;"></div>
+          </div>
+          <span style="font-size: 12px; font-weight: 600; color: #8E9CA8; cursor: pointer;" onclick="navigateTo('screen-login')">Skip</span>
+        </div>
+
+        <div class="card anim-card anim-delay-1" style="background: linear-gradient(180deg, #F9FBE7 0%, #FFFFFF 100%); padding: 18px; border: 1.5px solid rgba(212,244,66,0.3); position: relative; overflow: hidden; margin-top: 4px;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="tag tag-lime">
+              <span style="width: 6px; height: 6px; background:#435E00; border-radius: 50%;"></span>
+              AI Live Decode
+            </div>
+            <div class="tag tag-lime">
+              420Hz • Alert Meow
+            </div>
+          </div>
+
+          <!-- Living Animated SVG Cat that breathes, moves, and looks around -->
+          <div class="cat-avatar-interactive" onclick="triggerCatInteraction()" style="min-height: 220px; position: relative;">
+            <div class="acoustic-ring"></div>
+            <div class="acoustic-ring"></div>
+            <div class="acoustic-ring"></div>
+
+            <svg class="animated-cat-svg" id="heroCatSvg" width="160" height="170" viewBox="0 0 120 130" fill="none">
+              <!-- Body / Chest -->
+              <path d="M25 125 C25 85, 95 85, 95 125" fill="#E2DDD5"/>
+              <path d="M40 125 C40 100, 80 100, 80 125" fill="#FFFFFF"/>
+
+              <!-- Collar with Bio-Track Bell -->
+              <path d="M35 110 Q60 118 85 110" stroke="#1E232B" stroke-width="4.5" stroke-linecap="round"/>
+              <circle cx="60" cy="116" r="6" fill="#D4F442" stroke="#1E232B" stroke-width="2"/>
+              <circle cx="60" cy="116" r="2" fill="#1E232B"/>
+
+              <!-- Ears (Twitching) -->
+              <g class="cat-ear-left">
+                <polygon points="26,52 14,14 50,34" fill="#C5BDB2"/>
+                <polygon points="26,48 18,20 44,34" fill="#F4B8B8"/>
+              </g>
+              <g class="cat-ear-right">
+                <polygon points="94,52 106,14 70,34" fill="#C5BDB2"/>
+                <polygon points="94,48 102,20 76,34" fill="#F4B8B8"/>
+              </g>
+
+              <!-- Head Base -->
+              <ellipse cx="60" cy="62" rx="42" ry="36" fill="#D8D0C5"/>
+              <path d="M20 72 C14 62, 30 50, 36 58 C38 66, 26 78, 20 72 Z" fill="#C5BDB2"/>
+              <path d="M100 72 C106 62, 90 50, 84 58 C82 66, 94 78, 100 72 Z" fill="#C5BDB2"/>
+              <ellipse cx="60" cy="74" rx="20" ry="14" fill="#FFFFFF"/>
+
+              <!-- Eyes & Wandering Pupils -->
+              <ellipse cx="44" cy="56" rx="9" ry="11" fill="#FFEAA7"/>
+              <ellipse cx="44" cy="56" rx="8" ry="10" fill="#FDCB6E"/>
+              <g class="cat-pupil" id="leftPupil">
+                <ellipse cx="44" cy="56" rx="3.5" ry="8" fill="#14171A"/>
+                <circle cx="42" cy="52" r="2" fill="#FFFFFF"/>
+              </g>
+              <path class="cat-eyelid" d="M35 56 Q44 45 53 56 Q44 47 35 56 Z" fill="#C5BDB2"/>
+
+              <ellipse cx="76" cy="56" rx="9" ry="11" fill="#FFEAA7"/>
+              <ellipse cx="76" cy="56" rx="8" ry="10" fill="#FDCB6E"/>
+              <g class="cat-pupil" id="rightPupil">
+                <ellipse cx="76" cy="56" rx="3.5" ry="8" fill="#14171A"/>
+                <circle cx="74" cy="52" r="2" fill="#FFFFFF"/>
+              </g>
+              <path class="cat-eyelid" d="M67 56 Q76 45 85 56 Q76 47 67 56 Z" fill="#C5BDB2"/>
+
+              <!-- Cute Nose -->
+              <polygon points="57,69 63,69 60,73" fill="#E88888"/>
+
+              <!-- Mouth -->
+              <path d="M60 73 L60 76 M60 76 Q54 81 48 76 M60 76 Q66 81 72 76" stroke="#4A4A4A" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+
+              <!-- Whiskers -->
+              <path d="M22 66 L2 64 M20 72 L0 74 M22 78 L4 83" stroke="#8E857B" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M98 66 L118 64 M100 72 L120 74 M98 78 L116 83" stroke="#8E857B" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-radius: 16px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 14px rgba(0,0,0,0.04);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 16px;">🎧</span>
+              <div>
+                <div style="font-size: 9.5px; font-weight: 700; color: #8E9CA8; text-transform: uppercase;">Audio Mood</div>
+                <div style="font-size: 12.5px; font-weight: 700; color: #14171A;">Hunting Mind 94%</div>
+              </div>
+            </div>
+            <span class="tag tag-purple">Acoustic A+</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 18px; text-align: left;" class="anim-card anim-delay-2">
+          <div style="font-size: 11px; font-weight: 800; color: #7856FF; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 6px;">
+            ✦ Acoustic Neural Engine
+          </div>
+          <h1 style="font-size: 26px; font-weight: 800; line-height: 1.2; letter-spacing: -0.6px; color: #14171A; margin-bottom: 10px;">
+            Understand what your cat <span class="font-serif-italic" style="color: #496300; font-weight: 400;">feels</span> every single day
+          </h1>
+          <p style="font-size: 13.5px; line-height: 1.5; color: #657786; margin-bottom: 18px;">
+            Record a quick 30-second clip. Our pet behavioral AI breaks down posture, micro-pitch vocal patterns, and daily habits.
+          </p>
+
+          <div style="display: flex; gap: 12px; margin-bottom: 22px;">
+            <div style="flex: 1; background: #fff; border-radius: 16px; padding: 10px 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 28px; height: 28px; border-radius: 50%; background: #E8F8F0; display: flex; align-items: center; justify-content: center; color: #27AE60; font-size: 12px; font-weight: 800;">✓</div>
+              <div>
+                <div style="font-size: 12px; font-weight: 800; color: #14171A;">98.2% Accurate</div>
+                <div style="font-size: 10px; color: #8E9CA8;">Ethologist vetted</div>
+              </div>
+            </div>
+            <div style="flex: 1; background: #fff; border-radius: 16px; padding: 10px 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px;">
+              <div style="width: 28px; height: 28px; border-radius: 50%; background: #FFF5EC; display: flex; align-items: center; justify-content: center; color: #F2994A; font-size: 12px;">🐾</div>
+              <div>
+                <div style="font-size: 12px; font-weight: 800; color: #14171A;">40+ Vocals</div>
+                <div style="font-size: 10px; color: #8E9CA8;">Cataloged sounds</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-lime press-btn anim-card anim-delay-3" onclick="navigateTo('screen-setup')">
+            Get Started ➔
+          </button>
+
+          <div style="text-align: center; margin-top: 14px;">
+            <span style="font-size: 12px; color: #8E9CA8;">Already a parent? </span>
+            <span style="font-size: 12px; font-weight: 700; color: #14171A; cursor: pointer; text-decoration: underline;" onclick="navigateTo('screen-login')">Skip to Sign In</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 2: LOGIN & SIGN UP -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-login">
+        <div class="app-header">
+          <button class="header-icon-btn press-btn" onclick="navigateTo('screen-onboarding')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="app-brand">
+            <span style="background: var(--lime); border-radius: 8px; padding: 2px 5px; font-size: 12px;">🐱</span>
+            CatSense<span style="color: #657786; font-weight: 400;">.ai</span>
+          </div>
+          <div style="width: 36px;"></div>
+        </div>
+
+        <div style="margin: 12px 0 20px;">
+          <div class="tag tag-purple" style="margin-bottom: 8px;">🐾 AI Feline Acoustics</div>
+          <h1 style="font-size: 28px; font-weight: 800; line-height: 1.15; letter-spacing: -0.6px;">
+            Join the <span class="font-serif-italic" style="color: #6842EE;">family</span> of happy cats
+          </h1>
+          <p style="font-size: 13px; color: #657786; margin-top: 6px;">
+            Track wellness, understand behaviors, and catch early symptoms.
+          </p>
+        </div>
+
+        <div style="display: flex; background: #E9ECEF; padding: 4px; border-radius: 14px; margin-bottom: 18px;">
+          <button style="flex: 1; padding: 8px; border-radius: 10px; border: none; background: #fff; font-weight: 700; font-size: 12.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">Create Account</button>
+          <button style="flex: 1; padding: 8px; border-radius: 10px; border: none; background: transparent; font-weight: 600; font-size: 12.5px; color: #657786;">Log In</button>
+        </div>
+
+        <button class="press-btn" style="width: 100%; background: #fff; border: 1.5px solid var(--border-color); border-radius: 16px; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 16px;">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.15z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+          Continue with Google
+        </button>
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+          <div style="flex: 1; height: 1px; background: #E2E8F0;"></div>
+          <span style="font-size: 11px; color: #8E9CA8; text-transform: uppercase; font-weight: 600;">or with email</span>
+          <div style="flex: 1; height: 1px; background: #E2E8F0;"></div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 12px; font-weight: 700; color: #14171A; display: block; margin-bottom: 6px;">Email address</label>
+          <div style="background: #fff; border: 1.5px solid var(--border-color); border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 8px;">
+            <span style="color: #8E9CA8;">@</span>
+            <input type="email" value="purrfect_owner@domain.com" style="border: none; outline: none; width: 100%; font-size: 13.5px; font-family: var(--font-sans); color: #14171A;">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <label style="font-size: 12px; font-weight: 700; color: #14171A;">Password</label>
+            <span style="font-size: 11px; color: #8E9CA8;">Min. 8 characters</span>
+          </div>
+          <div style="background: #fff; border: 1.5px solid var(--border-color); border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between;">
+            <span style="letter-spacing: 3px; font-size: 14px; color: #14171A;">••••••••••••</span>
+            <span style="color: #8E9CA8; cursor: pointer;">👁</span>
+          </div>
+        </div>
+
+        <button class="btn-lime press-btn" onclick="navigateTo('screen-setup')">
+          Create Account 🐾
+        </button>
+
+        <div style="margin-top: 24px; text-align: center;">
+          <div class="tag tag-mint" style="padding: 6px 12px; border-radius: 12px;">
+            🛡️ 100% Private &amp; Vet-Reviewed Baseline
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 3: COMPANION SETUP (TELL US ABOUT YOUR CAT) -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-setup">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <button class="header-icon-btn press-btn" onclick="navigateTo('screen-onboarding')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div style="text-align: center;">
+            <div style="font-size: 9.5px; font-weight: 800; color: #8E9CA8; text-transform: uppercase;">Onboarding</div>
+            <div style="font-size: 12px; font-weight: 700; color: #14171A;">Step 2 of 2: Companion</div>
+          </div>
+          <span style="font-size: 12px; font-weight: 600; color: #8E9CA8; cursor: pointer;" onclick="navigateTo('screen-dashboard')">Skip for now</span>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">
+            Tell us about your <span class="font-serif-italic" style="color: #496300;">cat</span> 🐾
+          </h1>
+          <p style="font-size: 13px; color: #657786; margin-top: 4px;">
+            We tune behavioral sound waves and motion algorithms to their unique profile.
+          </p>
+        </div>
+
+        <!-- Milo Photo & Bio-Ready Badge -->
+        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
+          <div style="position: relative; cursor: pointer;" onclick="showToast('Photo uploaded for Milo!')">
+            <div style="width: 90px; height: 90px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, var(--lime), #7856FF); box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Milo">
+            </div>
+            <div class="tag tag-lime" style="position: absolute; top: -6px; right: -20px; font-size: 9px;">
+              • Bio-Ready
+            </div>
+          </div>
+          <span style="font-size: 11px; font-weight: 600; color: #8E9CA8; margin-top: 8px;">Tap to replace Milo's photo</span>
+        </div>
+
+        <div class="card" style="padding: 14px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <label style="font-size: 11px; font-weight: 700; color: #8E9CA8; text-transform: uppercase;">Cat's Name</label>
+            <span style="font-size: 10px; font-weight: 700; color: #27AE60;">REQUIRED</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <input type="text" value="Milo" style="border: none; outline: none; font-size: 16px; font-weight: 700; color: #14171A; width: 80%;">
+            <span style="color: #27AE60; font-size: 16px;">✓</span>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 14px; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; color: #8E9CA8; text-transform: uppercase; margin-bottom: 6px;">Breed Identification</div>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 15px; font-weight: 700; color: #14171A;">British Shorthair</span>
+            <span class="tag tag-purple">Acoustic A+ ▾</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+          <div class="card" style="flex: 1; padding: 12px; margin-bottom: 0;">
+            <div style="font-size: 11px; font-weight: 700; color: #8E9CA8;">🎂 Age</div>
+            <div style="font-size: 16px; font-weight: 800; color: #14171A; margin: 4px 0 2px;">2y 4m</div>
+            <div style="font-size: 10px; color: #8E9CA8;">Nov 2022</div>
+          </div>
+
+          <div class="card" style="flex: 1; padding: 12px; margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between;">
+              <div style="font-size: 11px; font-weight: 700; color: #8E9CA8;">⚖️ Weight</div>
+              <span class="tag tag-dark" style="font-size: 9px; padding: 1px 5px;">KG</span>
+            </div>
+            <div style="font-size: 16px; font-weight: 800; color: #14171A; margin: 4px 0 2px;">4.8 <span style="font-size: 12px; font-weight: 500;">kg</span></div>
+            <div style="font-size: 10px; color: #27AE60; font-weight: 600;">Healthy Range</div>
+          </div>
+        </div>
+
+        <button class="btn-dark press-btn" onclick="navigateTo('screen-empty')">
+          Save &amp; Enter Dashboard ➔
+        </button>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 4: EMPTY STATE (WELCOME, MILO - 0 SCANS) -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-empty">
+        <div class="app-header">
+          <div class="app-brand">
+            <span style="background: var(--lime); border-radius: 8px; padding: 2px 5px; font-size: 12px;">🐱</span>
+            CatSense
+          </div>
+          <div class="app-header-right">
+            <button class="header-icon-btn press-btn" onclick="navigateTo('screen-alerts')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </button>
+            <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="tag tag-purple">New Pet Profile</div>
+            <div class="tag tag-lime">• Model Ready</div>
+          </div>
+          <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-top: 6px;">
+            Welcome, <span class="font-serif-italic" style="color: #496300;">Milo</span> 🐱
+          </h1>
+          <p style="font-size: 12.5px; color: #657786; margin-top: 2px;">
+            Let's build Milo's behavioral fingerprint together.
+          </p>
+        </div>
+
+        <div class="card" style="background: linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%); border: 1.5px solid rgba(120,86,255,0.2); text-align: center; padding: 22px 16px;">
+          <div style="display: flex; justify-content: flex-end;">
+            <span class="tag tag-purple" style="font-size: 9.5px;">✨ 0 / 1 Sessions</span>
+          </div>
+
+          <div style="width: 80px; height: 80px; margin: 6px auto 12px; background: #14181F; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px;">
+            🐈‍⬛
+          </div>
+
+          <h3 style="font-size: 18px; font-weight: 800; color: #14171A; margin-bottom: 6px;">
+            No video analysis yet!
+          </h3>
+          <p style="font-size: 12px; color: #657786; line-height: 1.45; max-width: 280px; margin: 0 auto 16px;">
+            Take a quick 20-30s video of Milo playing, napping, or meowing to unlock behavior insights.
+          </p>
+
+          <button class="btn-lime press-btn" onclick="navigateTo('screen-analyze')">
+            📹 Record First Video ✨
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 5: MAIN DASHBOARD -->
+      <!-- ============================================== -->
+      <div class="screen active" id="screen-dashboard">
+        <div class="app-header">
+          <div class="app-brand">
+            <span style="background: var(--lime); border-radius: 8px; padding: 2px 5px; font-size: 12px;">🐱</span>
+            CatSense
+          </div>
+          <div class="app-header-right">
+            <button class="header-icon-btn press-btn" onclick="navigateTo('screen-alerts')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <div class="badge-dot"></div>
+            </button>
+            <img class="avatar-mini press-btn" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" onclick="navigateTo('screen-profile')" alt="Milo">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="width: 7px; height: 7px; background: #27AE60; border-radius: 50%;"></span>
+            <span style="font-size: 10.5px; font-weight: 800; color: #8E9CA8; letter-spacing: 0.5px; text-transform: uppercase;">Behavioral Monitor Active</span>
+          </div>
+          <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-top: 2px;">
+            Good morning, <span class="font-serif-italic" style="color: #496300;">Milo</span>
+          </h1>
+        </div>
+
+        <!-- Current Vibe Card -->
+        <div class="card anim-card anim-delay-1" style="background: linear-gradient(145deg, #F8FDE8 0%, #FFFFFF 100%); border: 1.5px solid rgba(212,244,66,0.5); padding: 16px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div class="tag tag-mint">● Risk: Normal</div>
+            <div class="tag tag-lime" onclick="playSound('purr')" style="cursor: pointer;">
+              <span>🎵 Sound: Happy Purr (96%)</span>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; font-weight: 700; color: #8E9CA8; text-transform: uppercase;">Current Vibe</div>
+          <div style="font-size: 22px; font-weight: 800; color: #14171A; margin-top: 2px;">
+            Playful &amp; Content 🐾
+          </div>
+
+          <p style="font-size: 11.5px; color: #657786; line-height: 1.4; margin: 6px 0 14px;">
+            High acoustic harmony, gentle low-frequency purr patterns detected throughout the morning.
+          </p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div style="background: #fff; border-radius: 14px; padding: 10px; border: 1px solid var(--border-color);">
+              <div style="display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 700; color: #8E9CA8;">
+                <span>Activity Level</span>
+                <span style="color: #27AE60;">82%</span>
+              </div>
+              <div style="font-size: 15px; font-weight: 800; color: #14171A; margin-top: 2px;">Optimal vitality</div>
+            </div>
+
+            <div style="background: #fff; border-radius: 14px; padding: 10px; border: 1px solid var(--border-color);">
+              <div style="display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 700; color: #8E9CA8;">
+                <span>Sleep &amp; Rest</span>
+                <span>🌙</span>
+              </div>
+              <div style="font-size: 15px; font-weight: 800; color: #14171A; margin-top: 2px;">14.2 hrs</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-lime press-btn anim-card anim-delay-2" style="margin-bottom: 14px;" onclick="navigateTo('screen-analyze')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          + Analyze a New Video
+        </button>
+
+        <!-- Weekly Engagement Chart Card -->
+        <div class="card anim-card anim-delay-3" style="padding: 16px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 14px; font-weight: 800; color: #14171A;">Weekly Engagement</div>
+              <div style="font-size: 11px; color: #8E9CA8;">Daily active play &amp; roaming hours</div>
+            </div>
+            <span class="tag tag-dark" style="font-size: 9.5px;">📅 This Week</span>
+          </div>
+
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 100px; padding: 10px 4px 0; border-bottom: 1px solid #EDF2F7;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; height: 100%; justify-content: flex-end;">
+              <div style="width: 20px; height: 60%; background: #E2E8F0; border-radius: 6px;"></div>
+              <span style="font-size: 10px; font-weight: 700; color: #8E9CA8;">M</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; height: 100%; justify-content: flex-end;">
+              <div style="width: 20px; height: 75%; background: #E2E8F0; border-radius: 6px;"></div>
+              <span style="font-size: 10px; font-weight: 700; color: #8E9CA8;">T</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; height: 100%; justify-content: flex-end;">
+              <div style="width: 20px; height: 50%; background: #E2E8F0; border-radius: 6px;"></div>
+              <span style="font-size: 10px; font-weight: 700; color: #8E9CA8;">W</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; height: 100%; justify-content: flex-end;">
+              <div style="width: 20px; height: 85%; background: #E2E8F0; border-radius: 6px;"></div>
+              <span style="font-size: 10px; font-weight: 700; color: #8E9CA8;">T</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; height: 100%; justify-content: flex-end;">
+              <div style="width: 20px; height: 70%; background: #E2E8F0; border-radius: 6px;"></div>
+              <span style="font-size: 10px; font-weight: 700; color: #8E9CA8;">F</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; height: 100%; justify-content: flex-end;">
+              <div style="width: 20px; height: 95%; background: var(--lime); border-radius: 6px; box-shadow: 0 4px 10px rgba(212,244,66,0.4);"></div>
+              <span style="font-size: 10px; font-weight: 800; color: #14171A;">S</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; height: 100%; justify-content: flex-end;">
+              <div style="width: 20px; height: 40%; background: #E2E8F0; border-radius: 6px;"></div>
+              <span style="font-size: 10px; font-weight: 700; color: #8E9CA8;">S</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Observations -->
+        <div class="anim-card anim-delay-4">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="font-size: 13.5px; font-weight: 800; color: #14171A;">Recent Observations</div>
+            <span style="font-size: 11.5px; font-weight: 700; color: #7856FF; cursor: pointer;" onclick="navigateTo('screen-history')">View Log</span>
+          </div>
+
+          <div class="card" style="padding: 12px; margin-bottom: 8px; cursor: pointer;" onclick="navigateTo('screen-breakdown')">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <div style="display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 800; color: #7856FF; text-transform: uppercase;">
+                <span>🎥</span> Video Breakdown
+              </div>
+              <span style="font-size: 10px; color: #8E9CA8;">Yesterday 4:15 PM</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 700; color: #14171A;">Milo spent 45% resting, 30% grooming, 25% playful.</div>
+            
+            <div style="height: 6px; border-radius: 4px; display: flex; overflow: hidden; gap: 2px; margin-top: 8px;">
+              <div style="width: 45%; background: #7856FF;"></div>
+              <div style="width: 30%; background: #27AE60;"></div>
+              <div style="width: 25%; background: var(--lime);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 6: ANALYZE VIDEO -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-analyze">
+        <div class="app-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="header-icon-btn press-btn" onclick="navigateTo('screen-dashboard')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <div class="app-brand">Analyze Video</div>
+          </div>
+          <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <div class="tag tag-purple">✦ Acoustic &amp; Motion AI</div>
+          <h2 style="font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-top: 4px;">
+            Capture Milo's <span class="font-serif-italic" style="color: #6842EE;">moment</span>
+          </h2>
+        </div>
+
+        <div class="card anim-card anim-delay-1 press-btn" style="background: linear-gradient(135deg, #F9F6FF 0%, #FFFFFF 100%); border: 1.5px solid rgba(120,86,255,0.3); padding: 18px; margin-bottom: 12px;" onclick="startNeuralAnalysis('live')">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 24px;">📹</span>
+              <div>
+                <div style="font-size: 15px; font-weight: 800; color: #14171A;">Record Live</div>
+                <div style="font-size: 11px; color: #7856FF; font-weight: 600;">15s to 30s recommended</div>
+              </div>
+            </div>
+            <span class="tag tag-purple">32-Bit Dual Mic</span>
+          </div>
+          <button class="btn-dark" style="background: #7856FF; color: #fff;">Start Camera ➔</button>
+        </div>
+
+        <div class="card anim-card anim-delay-2 press-btn" style="background: linear-gradient(135deg, #F9FDE8 0%, #FFFFFF 100%); border: 1.5px solid rgba(212,244,66,0.6); padding: 18px;" onclick="startNeuralAnalysis('upload')">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 24px;">📤</span>
+              <div>
+                <div style="font-size: 15px; font-weight: 800; color: #14171A;">Upload Clip</div>
+                <div style="font-size: 11px; color: #5B7200; font-weight: 600;">MP4, MOV, HEVC</div>
+              </div>
+            </div>
+            <span class="tag tag-lime">4K &amp; HDR OK</span>
+          </div>
+          <button class="btn-lime">Choose Files 📁</button>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 7: PROCESSING SCREEN -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-processing">
+        <div class="app-header">
+          <button class="header-icon-btn press-btn" onclick="navigateTo('screen-analyze')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+          <div class="tag tag-lime">● Processing</div>
+          <div style="width: 36px;"></div>
+        </div>
+
+        <div style="text-align: center; margin: 10px 0 20px;">
+          <div class="radar-container">
+            <div class="radar-sweep"></div>
+            <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; position: relative; border: 3px solid var(--lime);">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" style="width: 100%; height: 100%; object-fit: cover;" alt="Scanning Milo">
+            </div>
+          </div>
+
+          <h2 style="font-size: 22px; font-weight: 800; letter-spacing: -0.4px; margin-top: 18px;">
+            Decoding Milo's <span class="font-serif-italic" style="color: #496300;">moment...</span>
+          </h2>
+        </div>
+
+        <div class="card" style="padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; margin-bottom: 6px;">
+            <span style="color: #14171A;">Analysis Pipeline</span>
+            <span style="color: #7856FF;" id="procPercent">75% Complete</span>
+          </div>
+          <div style="width: 100%; height: 8px; background: #EDF2F7; border-radius: 999px; overflow: hidden;">
+            <div id="procProgressBar" style="width: 75%; height: 100%; background: linear-gradient(90deg, #7856FF, var(--lime)); border-radius: 999px;"></div>
+          </div>
+        </div>
+
+        <button class="btn-outline press-btn" style="width: 100%; border: none; color: #EB5757; font-size: 12px;" onclick="navigateTo('screen-results')">
+          ✕ Skip to Results (Instant Demo)
+        </button>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 8: RESULTS OVERVIEW -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-results">
+        <div class="app-header">
+          <button class="header-icon-btn press-btn" onclick="navigateTo('screen-dashboard')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 800;">
+            Analysis <span class="font-serif-italic" style="color: #496300; font-size: 16px;">Complete</span>
+          </div>
+          <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden; position: relative; margin-bottom: 12px;">
+          <div style="position: relative; height: 180px; width: 100%; background: #000;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR2V0ng5lydjSYhHoV3vPDgnK6c1UI71-X5j9Ce2EV_UauVReZ-4JO2s_mHi6RJRhQ6th20rRoFeTJAiI9c2kPOrgycCd3NbkyWG6KwZKRVtz6RT1s3Rh2qYJBJSyCo7EzMd1-4FKvC68xwZg6O6jpiYTxituvfgg22iCK5fHL7lirGztY8c0Po4FBEPEtEXI4bRmPunaq8gPStszsllAFkbbYOdO7ywz2Oix6zuqYck4na0Q9IuvN" style="width: 100%; height: 100%; object-fit: cover;" alt="Analyzed Clip">
+            <div style="position: absolute; top: 10px; left: 10px;" class="tag tag-dark">Today 10:42 AM • 0:34s</div>
+            <div style="position: absolute; top: 10px; right: 10px;" class="tag tag-lime">AI Tracked</div>
+          </div>
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, #F9FDE8 0%, #FFFFFF 100%); border: 1.5px solid rgba(212,244,66,0.6); padding: 14px; margin-bottom: 10px;">
+          <div style="font-size: 16px; font-weight: 800; color: #14171A;">Primary: Playful Roaming (54%)</div>
+          <div style="font-size: 11.5px; color: #657786; margin-top: 3px;">High vitality, tail upright with slight curve indicating joy.</div>
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, #F4F1FD 0%, #FFFFFF 100%); border: 1.5px solid rgba(120,86,255,0.25); padding: 14px; margin-bottom: 10px;">
+          <div style="font-size: 16px; font-weight: 800; color: #14171A;">Content Purr 🐾</div>
+          <div style="font-size: 11.5px; color: #657786; margin-top: 3px;">Frequency: 28 Hz • 96% Audio Confidence</div>
+        </div>
+
+        <div class="card" style="padding: 6px 12px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #EDF2F7; cursor: pointer;" onclick="navigateTo('screen-breakdown')">
+            <div style="font-size: 13px; font-weight: 700;">📊 Deep Behavior &amp; Posture</div>
+            <span>➔</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #EDF2F7; cursor: pointer;" onclick="navigateTo('screen-sound')">
+            <div style="font-size: 13px; font-weight: 700;">🎵 Vocalization &amp; Waveform</div>
+            <span>➔</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; cursor: pointer;" onclick="navigateTo('screen-health')">
+            <div style="font-size: 13px; font-weight: 700;">🩺 Health &amp; Risk Comparison</div>
+            <span>➔</span>
+          </div>
+        </div>
+
+        <button class="btn-lime press-btn" onclick="showToast('Analysis saved to Milo\'s Diary! 🐾'); navigateTo('screen-dashboard')">
+          💾 Save to Milo's Diary
+        </button>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 9: BEHAVIOR BREAKDOWN -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-breakdown">
+        <div class="app-header">
+          <button class="header-icon-btn press-btn" onclick="navigateTo('screen-results')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 800;">
+            Behavior <span class="font-serif-italic" style="color: #496300; font-size: 16px;">Breakdown</span>
+          </div>
+          <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+        </div>
+
+        <!-- Keyframe image -->
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 14px;">
+          <div style="position: relative; height: 160px; background: #000;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR2V0ng5lydjSYhHoV3vPDgnK6c1UI71-X5j9Ce2EV_UauVReZ-4JO2s_mHi6RJRhQ6th20rRoFeTJAiI9c2kPOrgycCd3NbkyWG6KwZKRVtz6RT1s3Rh2qYJBJSyCo7EzMd1-4FKvC68xwZg6O6jpiYTxituvfgg22iCK5fHL7lirGztY8c0Po4FBEPEtEXI4bRmPunaq8gPStszsllAFkbbYOdO7ywz2Oix6zuqYck4na0Q9IuvN" style="width: 100%; height: 100%; object-fit: cover;" alt="Keyframe">
+            <div style="position: absolute; bottom: 8px; left: 8px;" class="tag tag-dark">Keyframe: 00:15s</div>
+            <div style="position: absolute; bottom: 8px; right: 8px;" class="tag tag-lime">94% Grooming</div>
+          </div>
+        </div>
+
+        <!-- Temporal Acoustic Map -->
+        <div class="card" style="padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 12px; font-weight: 800; color: #14171A;">Temporal Acoustic &amp; Motion Map</div>
+            <span class="tag tag-dark" style="font-size: 9px;">Live Segment</span>
+          </div>
+
+          <div style="background: #EDF2F7; height: 26px; border-radius: 8px; overflow: hidden; display: flex; gap: 2px; padding: 2px; margin-bottom: 6px;">
+            <div class="timeline-bar-segment" style="width: 38%; background: var(--lime); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #14171A;">38%</div>
+            <div class="timeline-bar-segment" style="width: 24%; background: #7856FF; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff;">24%</div>
+            <div class="timeline-bar-segment" style="width: 20%; background: #27AE60; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff;">20%</div>
+            <div class="timeline-bar-segment" style="width: 12%; background: #F2994A; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff;">12%</div>
+            <div class="timeline-bar-segment" style="width: 6%; background: #A0AEC0;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 9.5px; color: #8E9CA8; font-weight: 600;">
+            <span>00:00s</span>
+            <span>00:12s</span>
+            <span>00:19s</span>
+            <span>00:26s</span>
+            <span>00:34s</span>
+          </div>
+        </div>
+
+        <!-- Logged States List -->
+        <div class="card" style="padding: 14px;">
+          <div style="border-bottom: 1px solid #EDF2F7; padding-bottom: 8px; margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
+              <span>🧼 Grooming (00:12–00:19)</span>
+              <span style="color: #7856FF;">24%</span>
+            </div>
+            <div style="font-size: 10.5px; color: #657786; margin-top: 2px;">Left shoulder &amp; paw cleaning, calm repetitive rhythm.</div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
+              <span>🐾 Roaming (00:00–00:12)</span>
+              <span style="color: #5B7200;">38%</span>
+            </div>
+            <div style="font-size: 10.5px; color: #657786; margin-top: 2px;">Casual perimeter patrol with steady cadenced gait.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 10: HEALTH & RISK -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-health">
+        <div class="app-header">
+          <button class="header-icon-btn press-btn" onclick="navigateTo('screen-results')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 800;">
+            Health &amp; <span class="font-serif-italic" style="color: #496300; font-size: 16px;">Risk</span>
+          </div>
+          <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+        </div>
+
+        <div class="card" style="text-align: center; padding: 22px 16px; margin-bottom: 14px;">
+          <div style="position: relative; width: 140px; height: 140px; margin: 0 auto 12px;">
+            <svg width="140" height="140" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#F1F5F9" stroke-width="10"></circle>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#27AE60" stroke-width="10" stroke-dasharray="264" stroke-dashoffset="227" stroke-linecap="round" style="transform: rotate(-90deg); transform-origin: 50% 50%;"></circle>
+            </svg>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+              <div style="font-size: 32px; font-weight: 800; color: #14171A;">14<span style="font-size: 14px; font-weight: 600; color: #8E9CA8;">/100</span></div>
+              <div style="font-size: 9px; font-weight: 700; color: #27AE60;">Low Risk</div>
+            </div>
+          </div>
+
+          <div class="tag tag-mint">● Status: Optimal Normal</div>
+        </div>
+
+        <button class="btn-outline press-btn" style="width: 100%; font-weight: 700;" onclick="showToast('Downloading Milo Vet Dossier PDF...')">
+          📥 Download PDF for Milo's Vet
+        </button>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 11: SOUND ANALYSIS -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-sound">
+        <div class="app-header">
+          <button class="header-icon-btn press-btn" onclick="navigateTo('screen-results')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 800;">
+            Sound <span class="font-serif-italic" style="color: #7856FF; font-size: 16px;">Analysis</span>
+          </div>
+          <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+        </div>
+
+        <!-- Waveform Player Card -->
+        <div class="card" style="background: linear-gradient(180deg, #F9F6FF 0%, #FFFFFF 100%); border: 1.5px solid rgba(120,86,255,0.3); padding: 16px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div style="font-size: 13px; font-weight: 800; color: #14171A;">Vocal_Sample_042.wav</div>
+            <span class="tag tag-purple">Peak: 480 Hz</span>
+          </div>
+
+          <div class="wave-bars" id="soundBars">
+            <div class="wave-bar" style="height: 12px;"></div>
+            <div class="wave-bar" style="height: 24px;"></div>
+            <div class="wave-bar" style="height: 18px;"></div>
+            <div class="wave-bar" style="height: 38px;"></div>
+            <div class="wave-bar" style="height: 44px;"></div>
+            <div class="wave-bar" style="height: 28px;"></div>
+            <div class="wave-bar" style="height: 48px;"></div>
+            <div class="wave-bar" style="height: 32px;"></div>
+            <div class="wave-bar" style="height: 20px;"></div>
+            <div class="wave-bar" style="height: 36px;"></div>
+            <div class="wave-bar" style="height: 42px;"></div>
+            <div class="wave-bar" style="height: 16px;"></div>
+            <div class="wave-bar" style="height: 26px;"></div>
+            <div class="wave-bar" style="height: 34px;"></div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 14px;">
+            <span style="font-size: 11px; font-weight: 700; color: #8E9CA8;" id="audioTimer">00:14 / 00:34</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <button class="press-btn" style="width: 32px; height: 32px; border-radius: 50%; background: #EDF2F7; border: none;" onclick="seekAudio(-5)">↺</button>
+              <button class="press-btn" id="playAudioBtn" style="width: 44px; height: 44px; border-radius: 50%; background: #7856FF; color: #fff; border: none;" onclick="toggleAudioWavePlayback()">▶</button>
+              <button class="press-btn" style="width: 32px; height: 32px; border-radius: 50%; background: #EDF2F7; border: none;" onclick="seekAudio(5)">↻</button>
+            </div>
+            <span class="tag tag-purple">Spectra</span>
+          </div>
+        </div>
+
+        <div class="card" style="background: #FAFFF0; border: 1.5px solid rgba(212,244,66,0.6); padding: 14px;">
+          <div style="font-size: 18px; font-weight: 800; color: #14171A; margin-bottom: 4px;">Happy &amp; Affectionate 🐱</div>
+          <p style="font-size: 12px; color: #657786;">Milo is expressing deep comfort and positive bonding.</p>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 12: BEHAVIORAL HISTORY & TRENDS -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-history">
+        <div class="app-header">
+          <div class="app-brand">Behavioral History</div>
+          <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+        </div>
+
+        <div class="card" style="padding: 16px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 800; color: #14171A; margin-bottom: 4px;">Activity &amp; Rest Balance</div>
+          <div style="font-size: 24px; font-weight: 800; color: #14171A; margin-bottom: 12px;">3.6h <span style="font-size: 12px; color: #8E9CA8;">Daily Average</span></div>
+
+          <div style="height: 14px; border-radius: 8px; overflow: hidden; display: flex; gap: 2px; margin-bottom: 10px;">
+            <div style="width: 78%; background: var(--lime);" title="Happy / Purr 78%"></div>
+            <div style="width: 15%; background: #7856FF;" title="Inquisitive 15%"></div>
+            <div style="width: 7%; background: #F2994A;" title="Alert 7%"></div>
+          </div>
+        </div>
+
+        <div class="card press-btn" style="padding: 10px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;" onclick="navigateTo('screen-results')">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHBQnKDT14w7Pq14-Qn6kzX31xDFY5bWfUkumVPKdxtgEZzg8Sgwvo1KbtXSgkij_d7l6h4JbBrucNtQFXtdsDvlo862IWIp_NifnK5OSDIkn9aSwToAyxCPgaJAPQlSG2agJ6ohmF4QYTSquQRDC3fP9KRahGPN3M7N2ThZTR2m3OB23Ag1bhaGVdrtvGk7M9Sv8fWkZ6YmynjfbVLaU4E-uNBO3h24AG2qOUBmkeFqm1Uxa8gKI-" style="width: 52px; height: 52px; border-radius: 10px; object-fit: cover;" alt="Clip">
+          <div style="flex: 1;">
+            <div style="font-size: 13px; font-weight: 800; color: #14171A;">Tuesday Morning Pounce</div>
+            <div style="font-size: 10.5px; color: #8E9CA8;">98% Happy • Play Purr</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 13: FELINE ALERTS -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-alerts">
+        <div class="app-header">
+          <button class="header-icon-btn press-btn" onclick="navigateTo('screen-dashboard')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="app-brand">Alerts</div>
+          <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, #FFF5F5 0%, #FFFFFF 100%); border: 1.5px solid rgba(235,87,87,0.3); padding: 16px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 14px; font-weight: 800; color: #14171A;">Decreased Activity Window</div>
+            <span class="tag tag-rose">High Priority</span>
+          </div>
+          <p style="font-size: 12px; color: #657786; margin-bottom: 12px;">
+            Milo was <strong>35% less active</strong> during normal afternoon play cycle (14:00 - 16:30).
+          </p>
+          <button class="btn-lime press-btn" style="padding: 10px; font-size: 12px;" onclick="showToast('Alert marked as read')">✓ Mark as Read</button>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 14: MILO'S PROFILE & AI SETTINGS -->
+      <!-- ============================================== -->
+      <div class="screen" id="screen-profile">
+        <div class="app-header">
+          <div class="app-brand">CatSense</div>
+          <img class="avatar-mini" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" alt="Milo">
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%); border: 1.5px solid rgba(39,174,96,0.3); padding: 18px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTvgj5sEm4nAoJbnDtyhD54xgIpmQm2DDr_ZHHwEKq-iRsRWEy4MsxRTzn0jpsz0Buj2BkTPYG32L0r6TP8cujJ-0MXzadS2BaNjRzrSQ8-QJ2LNB4Ou9O-1spgJTRtz9nv_L5h1QrBseUGtwLi_Ns-QWF2-AQP2BAfSjbQmp4jNGwQ47r2u7tpJUf2DjxcE06xHnJCD-MC8gUHmtXoiJm0foTR_o2qHn2JJZ4-iCnH9flKHFhhBi" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--lime);" alt="Milo">
+            <div>
+              <div style="font-size: 18px; font-weight: 800; color: #14171A;">Milo</div>
+              <div style="font-size: 12px; color: #657786;">British Shorthair • 2y 4m</div>
+            </div>
+          </div>
+          <button class="btn-outline press-btn" style="width: 100%; font-size: 12px;" onclick="navigateTo('screen-setup')">✏️ Edit Companion Details</button>
+        </div>
+
+        <div class="card" style="padding: 16px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #EDF2F7;">
+            <div style="font-size: 12.5px; font-weight: 700;">Real-time Acoustic Isolation</div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked onchange="showToast('Acoustic isolation updated')">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+            <div style="font-size: 12.5px; font-weight: 700;">Frame-by-frame Gait Symmetry</div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked onchange="showToast('Gait symmetry tracking updated')">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+          <button class="press-btn" style="background: none; border: none; color: #EB5757; font-weight: 700; font-size: 13px; cursor: pointer;" onclick="navigateTo('screen-login'); showToast('Logged out of Milo\'s session')">
+            🚪 Log Out
+          </button>
+        </div>
+      </div>
+
+    </div><!-- End screen-viewport -->
+
+    <!-- Persistent Bottom Navigation -->
+    <div class="bottom-nav">
+      <div class="nav-item active" id="navHome" onclick="navigateTo('screen-dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+      </div>
+      <div class="nav-item" id="navAnalyze" onclick="navigateTo('screen-analyze')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+        <span>Analyze</span>
+      </div>
+      <div class="nav-item" id="navHistory" onclick="navigateTo('screen-history')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        <span>History</span>
+      </div>
+      <div class="nav-item" id="navProfile" onclick="navigateTo('screen-profile')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Profile</span>
+      </div>
+    </div>
+
+  </div><!-- End phone-container -->
+
+  <script>
+    // ==========================================
+    // JAVASCRIPT LOGIC & REAL-TIME INTERACTION
+    // ==========================================
+    let currentScreen = 'screen-dashboard';
+    let audioEnabled = true;
+    let audioCtx = null;
+    let isPlayingAudioWave = false;
+    let waveInterval = null;
+    let audioTime = 14;
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          audioCtx = new AudioContext();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Synthesized Sound Effects
+    function playSound(type) {
+      if (!audioEnabled) return;
+      initAudioContext();
+      if (!audioCtx) return;
+
+      try {
+        const now = audioCtx.currentTime;
+        if (type === 'purr') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          const lfo = audioCtx.createOscillator();
+          const lfoGain = audioCtx.createGain();
+
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(28, now);
+
+          lfo.frequency.setValueAtTime(24, now);
+          lfoGain.gain.setValueAtTime(15, now);
+          lfo.connect(osc.frequency);
+
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          lfo.start(now);
+          osc.start(now);
+          lfo.stop(now + 1.2);
+          osc.stop(now + 1.2);
+        } else if (type === 'meow') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(420, now);
+          osc.frequency.exponentialRampToValueAtTime(780, now + 0.18);
+          osc.frequency.exponentialRampToValueAtTime(460, now + 0.45);
+
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.5);
+        } else if (type === 'click') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(600, now);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        }
+      } catch (e) {
+        console.warn("Audio feedback error:", e);
+      }
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      const btn = document.getElementById('soundToggleBtn');
+      btn.classList.toggle('active', audioEnabled);
+      showToast(audioEnabled ? 'Sound feedback ON 🎵' : 'Sound feedback MUTED 🔇');
+    }
+
+    function expandIsland() {
+      const island = document.getElementById('dynamicIsland');
+      island.classList.toggle('expanded');
+      playSound('purr');
+      setTimeout(() => {
+        island.classList.remove('expanded');
+      }, 3500);
+    }
+
+    function navigateTo(screenId) {
+      playSound('click');
+      const allScreens = document.querySelectorAll('.screen');
+      allScreens.forEach(s => s.classList.remove('active'));
+
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add('active');
+        currentScreen = screenId;
+        document.getElementById('screenSwitcher').value = screenId;
+        document.getElementById('screenViewport').scrollTop = 0;
+
+        updateNavState(screenId);
+
+        if (screenId === 'screen-processing') {
+          runProcessingSimulation();
+        }
+
+        triggerScreenAnimations(target);
+      }
+    }
+
+    function updateNavState(screenId) {
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      if (screenId === 'screen-dashboard' || screenId === 'screen-empty') {
+        document.getElementById('navHome').classList.add('active');
+      } else if (screenId === 'screen-analyze' || screenId === 'screen-processing' || screenId === 'screen-results' || screenId === 'screen-breakdown') {
+        document.getElementById('navAnalyze').classList.add('active');
+      } else if (screenId === 'screen-history' || screenId === 'screen-health' || screenId === 'screen-sound') {
+        document.getElementById('navHistory').classList.add('active');
+      } else if (screenId === 'screen-profile' || screenId === 'screen-setup') {
+        document.getElementById('navProfile').classList.add('active');
+      }
+    }
+
+    function triggerScreenAnimations(screenEl) {
+      const cards = screenEl.querySelectorAll('.anim-card');
+      cards.forEach((card, i) => {
+        card.style.animation = 'none';
+        card.offsetHeight;
+        card.style.animation = `cardFloatUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
+        card.style.animationDelay = `${(i * 0.07)}s`;
+      });
+    }
+
+    function runProcessingSimulation() {
+      let percent = 20;
+      const bar = document.getElementById('procProgressBar');
+      const label = document.getElementById('procPercent');
+      
+      const interval = setInterval(() => {
+        percent += 20;
+        if (percent > 100) {
+          percent = 100;
+          clearInterval(interval);
+          setTimeout(() => {
+            playSound('purr');
+            navigateTo('screen-results');
+          }, 500);
+        }
+        if (bar) bar.style.width = percent + '%';
+        if (label) label.textContent = percent + '% Complete';
+      }, 350);
+    }
+
+    function startNeuralAnalysis(mode) {
+      playSound('purr');
+      showToast(mode === 'live' ? 'Starting high-res audio & camera...' : 'Processing uploaded cat clip...');
+      setTimeout(() => {
+        navigateTo('screen-processing');
+      }, 300);
+    }
+
+    function toggleAudioWavePlayback() {
+      isPlayingAudioWave = !isPlayingAudioWave;
+      const btn = document.getElementById('playAudioBtn');
+      const bars = document.querySelectorAll('#soundBars .wave-bar');
+
+      if (isPlayingAudioWave) {
+        btn.textContent = '❚❚';
+        playSound('purr');
+        bars.forEach(bar => bar.classList.add('playing'));
+        waveInterval = setInterval(() => {
+          audioTime++;
+          if (audioTime > 34) audioTime = 0;
+          const displaySec = audioTime < 10 ? '0' + audioTime : audioTime;
+          document.getElementById('audioTimer').textContent = `00:${displaySec} / 00:34`;
+        }, 1000);
+      } else {
+        btn.textContent = '▶';
+        bars.forEach(bar => bar.classList.remove('playing'));
+        clearInterval(waveInterval);
+      }
+    }
+
+    function seekAudio(delta) {
+      audioTime = Math.max(0, Math.min(34, audioTime + delta));
+      const displaySec = audioTime < 10 ? '0' + audioTime : audioTime;
+      document.getElementById('audioTimer').textContent = `00:${displaySec} / 00:34`;
+      playSound('click');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('appToast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2400);
+    }
+
+    // Front-Page Cat Interactive Tap & Meow
+    function triggerCatInteraction() {
+      playSound('meow');
+      showToast('Milo purred: "Mrrr-meow!" 🐾');
+
+      const heroSvg = document.getElementById('heroCatSvg');
+      if (heroSvg) {
+        heroSvg.style.transform = 'scale(1.08) rotate(-2deg)';
+        setTimeout(() => {
+          heroSvg.style.transform = '';
+        }, 300);
+      }
+    }
+
+    // Interactive mouse / touch tracking for cat pupils looking left and right
+    document.addEventListener('mousemove', (e) => {
+      const heroSvg = document.getElementById('heroCatSvg');
+      if (!heroSvg) return;
+      const rect = heroSvg.getBoundingClientRect();
+      const catCenterX = rect.left + rect.width / 2;
+      const catCenterY = rect.top + rect.height / 2;
+      const deltaX = (e.clientX - catCenterX) / 35;
+      const deltaY = (e.clientY - catCenterY) / 35;
+      const clampX = Math.max(-4, Math.min(4, deltaX));
+      const clampY = Math.max(-2.5, Math.min(2.5, deltaY));
+      
+      const leftPupil = document.getElementById('leftPupil');
+      const rightPupil = document.getElementById('rightPupil');
+      if (leftPupil && rightPupil) {
+        leftPupil.style.transform = `translate(${clampX}px, ${clampY}px)`;
+        rightPupil.style.transform = `translate(${clampX}px, ${clampY}px)`;
+      }
+    });
+
+    // Real-time Status Bar Clock
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      const clockEl = document.getElementById('deviceClock');
+      if (clockEl) clockEl.textContent = `${hours}:${minutes}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>

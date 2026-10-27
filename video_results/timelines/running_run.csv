@@ -1,0 +1,9 @@
+from_s,to_s,behavior,confidence,speed_body_lengths_per_s,sitting_lying_separate
+0,2,no cat,0.00,,no cat
+2,4,no cat,0.00,,no cat
+4,6,no cat,0.00,,no cat
+6,8,moving,1.00,0.46,moving
+8,10,grooming,0.00,0.00,grooming
+10,12,moving,0.96,0.11,moving
+12,14,moving,1.00,,moving
+14,16,resting,0.00,0.00,sitting

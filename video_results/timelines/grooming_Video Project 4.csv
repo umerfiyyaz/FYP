@@ -1,0 +1,12 @@
+from_s,to_s,behavior,confidence,speed_body_lengths_per_s,sitting_lying_separate
+0,2,grooming,0.89,0.01,grooming
+2,4,grooming,0.97,0.02,grooming
+4,6,grooming,0.96,0.02,grooming
+6,8,grooming,0.70,0.04,grooming
+8,10,grooming,0.90,0.06,grooming
+10,12,grooming,0.92,0.04,grooming
+12,14,grooming,0.61,0.04,grooming
+14,16,grooming,0.76,0.01,grooming
+16,18,grooming,0.54,0.02,grooming
+18,20,grooming,0.57,0.01,grooming
+20,22,grooming,0.69,0.02,grooming
