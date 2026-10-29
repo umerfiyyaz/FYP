@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep CatSense theme colors, gradients and shadows in `src/styles.css`, applied through shared UI classes and semantic tokens, so visual updates preserve screen content and behavior.

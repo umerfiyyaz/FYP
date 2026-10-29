@@ -12,6 +12,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Clickable demo of CatSense: AI cat behavior, sound and health analysis." },
       { property: "og:title", content: "CatSense AI — Understand what your cat feels" },
       { property: "og:description", content: "Clickable demo of CatSense: AI cat behavior, sound and health analysis." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -28,8 +30,8 @@ function Index() {
   }, []);
   const C = map[s];
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted sm:py-6">
-      <div ref={ref} className="relative h-screen w-full max-w-[420px] overflow-y-auto bg-background sm:h-[860px] sm:rounded-[2.5rem] sm:shadow-2xl sm:ring-8 sm:ring-ink">
+    <div className="theme-shell flex min-h-screen items-center justify-center bg-muted sm:py-6">
+      <div ref={ref} className="theme-phone relative h-screen w-full max-w-[420px] overflow-y-auto bg-background sm:h-[860px] sm:rounded-[2.5rem] sm:shadow-2xl sm:ring-8 sm:ring-ink">
         <div key={s} className="float-in min-h-full pb-4">
           <C go={go} />
         </div>
