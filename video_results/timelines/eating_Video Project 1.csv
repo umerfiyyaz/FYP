@@ -1,9 +1,0 @@
-from_s,to_s,behavior,confidence,speed_body_lengths_per_s,sitting_lying_separate
-0,2,eating,1.00,0.04,eating
-2,4,eating,1.00,0.03,eating
-4,6,eating,1.00,0.06,eating
-6,8,eating,1.00,0.02,eating
-8,10,eating,1.00,0.09,eating
-10,12,eating,1.00,0.04,eating
-12,14,eating,1.00,0.02,eating
-14,16,eating,1.00,0.04,eating

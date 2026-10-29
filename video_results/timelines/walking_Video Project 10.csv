@@ -1,4 +1,0 @@
-from_s,to_s,behavior,confidence,speed_body_lengths_per_s,sitting_lying_separate
-0,2,moving,0.90,0.35,moving
-2,4,moving,0.74,0.31,moving
-4,6,resting,0.47,1.08,lying

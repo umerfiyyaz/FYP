@@ -548,7 +548,7 @@ def main():
 
 
 # =====================  CHANGE THESE IF NEEDED  =====================
-TEST_FOLDER = "test_videos"          # test_videos/<class>/<videos>
+TEST_FOLDER = "test_videos_2"          # test_videos/<class>/<videos>
 WEIGHTS = "behavior_best_v3.pt"      # your trained behavior model (v3)
 DETECTOR = "yolov8m.pt"              # same cat finder as in training
 DETECT_CONF = 0.15
