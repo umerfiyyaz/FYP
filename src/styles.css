@@ -161,7 +161,9 @@ body { font-family: var(--font-sans); }
 @utility wave { transform-origin: center; animation: wave 1s ease-in-out infinite; }
 @utility press { transition: transform .15s ease; &:active { transform: scale(.95); } }
 
-/* Reference theme only: screen structure, pictures, data and flows stay intact. */
+/* Reference theme only: screen structure, data and flows stay intact. */
+.theme-mascot { filter: drop-shadow(0 8px 12px color-mix(in oklab, var(--primary) 25%, transparent)); }
+.theme-phone img[src*="cat-mascot"] { object-fit: contain; }
 .theme-shell { background: linear-gradient(135deg, var(--ambient-top), var(--background) 65%, var(--mint)); }
 .theme-phone { background: var(--gradient-phone); scrollbar-width: thin; scrollbar-color: var(--border) var(--background); }
 .theme-phone * { letter-spacing: 0; }

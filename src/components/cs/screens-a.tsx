@@ -11,7 +11,7 @@ export function Welcome({ go }: { go: Go }) {
         <button onClick={() => go("signup")} className="press rounded-full bg-muted px-3 py-1 text-xs font-bold">Skip</button>
       </div>
       <div className="float-in relative mt-4">
-        <img src={IMG.hero} alt="Cat" className="h-80 w-full rounded-[2rem] object-cover" />
+        <img src={IMG.mascot} alt="Cat" className="theme-mascot bob h-80 w-full object-contain p-6" />
         <Pill className="absolute left-3 top-3 bg-card"><Icon n="graphic_eq" className="!text-sm" /> AI LIVE DECODE</Pill>
         <div className="bob absolute -right-1 top-6 flex items-center gap-1 rounded-full bg-lime px-3 py-1.5 text-xs font-bold shadow-lg"><Icon n="volume_up" className="!text-base" /> 420Hz • Alert Meow</div>
         <div className="bob absolute -bottom-4 left-3 flex items-center gap-2 rounded-2xl bg-lilac px-3 py-2 shadow-lg" style={{ animationDelay: "1s" }}>
@@ -166,8 +166,10 @@ export function Home({ go }: { go: Go }) {
         <Card className="relative mt-4 bg-mint">
           <div className="bob absolute -top-3 right-4 rounded-full bg-lime px-3 py-1 text-[11px] font-bold shadow"><Icon n="music_note" className="!text-sm" /> Sound: Happy Purr (96%)</div>
           <div className="flex justify-between"><Pill className="bg-card">🟢 RISK: NORMAL</Pill><Pill className="bg-card">Updated 14m ago</Pill></div>
-          <p className="mt-3 text-[11px] font-bold">CURRENT VIBE</p>
-          <p className="text-lg font-extrabold">Playful & Content 🐾</p>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <div><p className="text-[11px] font-bold">CURRENT VIBE</p><p className="text-lg font-extrabold">Playful & Content 🐾</p></div>
+            <img src={IMG.mascot} alt="" className="theme-mascot bob size-16 shrink-0 object-contain" />
+          </div>
           <p className="text-xs text-muted-foreground">High acoustic harmony, gentle low-frequency purr patterns detected throughout the morning.</p>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div className="rounded-2xl bg-card p-3"><p className="flex justify-between text-[10px] font-bold"><span>ACTIVITY LEVEL</span>82%</p><div className="my-2"><Meter pct={82} className="bg-lime" d={300} /></div><p className="text-[10px] text-muted-foreground">Optimal vitality window</p></div>
