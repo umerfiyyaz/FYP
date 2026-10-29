@@ -97,7 +97,8 @@
   --secondary: oklch(0.35601 0.10183 289.230);
   --secondary-foreground: oklch(0.98458 0.00799 293.914);
   --muted: oklch(0.23473 0.08800 283.809);
-  --muted-foreground: oklch(0.79405 0.05819 295.104);
+  --muted-foreground: oklch(0.86 0.035 295.104);
+  --success-foreground: oklch(0.9 0.095 165.357);
   --accent: oklch(0.35333 0.12700 286.163);
   --accent-foreground: oklch(0.98458 0.00799 293.914);
   --destructive: oklch(0.74549 0.15406 22.877);
@@ -187,7 +188,12 @@ body { font-family: var(--font-sans); }
 .theme-phone button.bg-ink:not(.theme-action) { background-image: var(--gradient-action); color: var(--primary-foreground); box-shadow: var(--shadow-action); }
 .theme-bar.bg-muted { background: linear-gradient(180deg, var(--lilac-deep), var(--violet-bar), var(--lilac)); box-shadow: var(--shadow-surface); }
 .theme-bar.bg-lime { background-image: var(--gradient-action); box-shadow: var(--shadow-action); }
-.theme-phone .bg-mint .text-muted-foreground { color: var(--foreground); opacity: .8; }
+.theme-phone .bg-mint .text-muted-foreground { color: var(--foreground); opacity: 1; }
+.theme-phone .text-lime-deep { color: var(--success-foreground); }
+.theme-phone .text-lilac-deep { color: var(--lilac-deep); }
+.theme-phone .theme-card.opacity-80, .theme-phone .theme-card.opacity-90 { opacity: 1; }
+.theme-phone .theme-card .opacity-70 { opacity: 1; color: var(--muted-foreground); }
+.theme-phone .text-ink-foreground\/60 { color: var(--muted-foreground); }
 .theme-phone .bg-lime-deep > .bg-card { background: var(--foreground); }
 @media (min-width: 640px) { .theme-phone { outline: 2px solid var(--frame); } }
 @media (prefers-reduced-motion: reduce) { .float-in, .grow-y, .grow-x, .bob, .wave, .animate-spin, .animate-ping { animation: none !important; } .press { transition: none; } }
