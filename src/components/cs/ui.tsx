@@ -1,6 +1,7 @@
 import type { ReactNode, CSSProperties } from "react";
 import { IMG } from "@/lib/imgs";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export type Screen =
   | "welcome" | "signup" | "onboard" | "empty" | "home" | "analyze" | "processing"
@@ -19,7 +20,7 @@ export function Card({ children, className, d = 0, onClick }: { children: ReactN
   return (
     <div
       onClick={onClick}
-      className={cn("float-in rounded-3xl bg-card p-4 shadow-sm", onClick && "press cursor-pointer", className)}
+      className={cn("theme-card float-in rounded-2xl bg-card p-4 shadow-sm", onClick && "press cursor-pointer", className)}
       style={{ animationDelay: `${d * 80}ms` }}
     >
       {children}
@@ -29,14 +30,14 @@ export function Card({ children, className, d = 0, onClick }: { children: ReactN
 
 export function Btn({ children, onClick, variant = "lime", className }: { children: ReactNode; onClick?: () => void; variant?: "lime" | "ink" | "ghost"; className?: string }) {
   const v = {
-    lime: "bg-lime text-ink",
-    ink: "bg-ink text-ink-foreground",
-    ghost: "bg-card text-foreground border border-border",
+    lime: "theme-action bg-primary text-primary-foreground",
+    ink: "theme-action bg-primary text-primary-foreground",
+    ghost: "theme-glass bg-card text-foreground border border-border",
   }[variant];
   return (
-    <button onClick={onClick} className={cn("press flex w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-bold shadow-sm", v, className)}>
+    <Button variant="ghost" onClick={onClick} className={cn("press flex h-auto w-full items-center justify-center gap-2 whitespace-normal rounded-xl px-5 py-3.5 text-sm font-bold shadow-sm", v, className)}>
       {children}
-    </button>
+    </Button>
   );
 }
 
@@ -84,14 +85,14 @@ const tabs: { s: Screen; n: string; l: string }[] = [
 ];
 export function BottomNav({ cur, go }: { cur: Screen; go: Go }) {
   return (
-    <nav className="sticky bottom-3 z-40 mx-4 mt-6 flex justify-around rounded-full bg-ink px-2 py-2.5 shadow-xl">
+    <nav className="theme-nav sticky bottom-3 z-40 mx-4 mt-6 flex justify-around rounded-2xl bg-ink px-2 py-2.5 shadow-xl">
       {tabs.map((t) => {
         const a = cur === t.s || (t.s === "home" && cur === "empty");
         return (
-          <button key={t.s} onClick={() => go(t.s)} className={cn("press flex flex-col items-center gap-0.5 rounded-full px-4 py-1 text-[10px] font-bold", a ? "text-lime" : "text-ink-foreground/60")}>
+          <Button variant="ghost" key={t.s} onClick={() => go(t.s)} className={cn("press flex h-auto flex-col items-center gap-0.5 rounded-xl px-4 py-1 text-[10px] font-bold", a ? "theme-action bg-primary text-primary-foreground" : "text-muted-foreground")}>
             <Icon n={t.n} fill={a} />
             {t.l}
-          </button>
+          </Button>
         );
       })}
     </nav>
@@ -103,7 +104,7 @@ export function Bars({ data, hi, max, h = 120, labels }: { data: number[]; hi?: 
     <div>
       <div className="flex items-end justify-between gap-2" style={{ height: h }}>
         {data.map((v, i) => (
-          <div key={i} className={cn("grow-y w-full rounded-full", i === hi ? "bg-lime" : "bg-muted")} style={{ height: `${(v / max) * 100}%`, animationDelay: `${200 + i * 70}ms` } as CSSProperties} />
+          <div key={i} className={cn("theme-bar grow-y w-full rounded-full", i === hi ? "bg-lime" : "bg-muted")} style={{ height: `${(v / max) * 100}%`, animationDelay: `${200 + i * 70}ms` } as CSSProperties} />
         ))}
       </div>
       {labels && (
@@ -134,5 +135,5 @@ export function Wave({ n = 7, className }: { n?: number; className?: string }) {
 }
 
 export function Serif({ children }: { children: ReactNode }) {
-  return <em className="font-serif font-medium italic text-lime-deep">{children}</em>;
+  return <em className="font-sans font-bold not-italic text-primary">{children}</em>;
 }
